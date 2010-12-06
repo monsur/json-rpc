@@ -1,0 +1,84 @@
+<h1>JSON-RPC 1.0</h1>
+<div><div><h2>JSON-RPC Specifications</h2><p>The specifications should provide the developer with the information needed to implement the protocol.</p><p><b><br></b></p><h2>Overview</h2><p>JSON-RPC is a lightweight remote procedure call protocol.It's designed to be simple!</p><p>The general mechanism consists of two peers establishing a data connection.
+During the lifetime of a connection, peers may invoke methods provided by the other peer.
+To invoke a remote method, a request is sent.
+Unless the request is a notification it must be replied to with a response.
+</p><h2>1.1 Request (method invocation)</h2><p>
+A remote method is invoked by sending a request to a remote service.
+The request is a single object serialized using <a href="http://json.org/"><span>JSON</span></a>.
+</p><p>
+It has three properties:
+</p><ul><li><strong><tt>method</tt></strong> - A String containing the name of the method to be invoked.
+</li><li><strong><tt>params</tt></strong> - An Array of objects to pass as arguments to the method.
+</li><li><strong><tt>id</tt></strong> - The request id. This can be of any type. It is used to match the response with the request that it is replying to.
+</li></ul><h2>1.2 Response</h2><p>
+When the method invocation completes, the service must reply with a response.
+The response is a single object serialized using <a href="http://json.org/"><span>JSON</span></a>.
+</p><p>
+It has three properties:
+</p><ul><li><strong><tt>result</tt></strong> - The Object that was returned by the invoked method. This must be null in case there was an error invoking the method.
+</li><li><strong><tt>error</tt></strong> - An Error object if there was an error invoking the method. It must be null if there was no error.
+</li><li><strong><tt>id</tt></strong> - This must be the same id as the request it is responding to.
+</li></ul><h2>1.3 Notification</h2><p>
+A notification is a special request which does not have a response.
+The notification is a single object serialized using <a href="http://json.org/"><span>JSON</span></a>.
+</p><p>
+It has the same properties as the request object with one exception.
+</p><ul><li><strong><tt>id</tt></strong> - Must be null.
+</li></ul><h2>2.1 JSON-RPC over stream connections</h2><p>
+The specifications do not require a certain transport protocol.
+The use of TCP/IP socket streams is encouraged.
+The serialized request and response objects are sent to the peers through the byte streams.
+</p><p>
+Requests and responses may be sent to a peer at any time.
+The peer must respond to each request unless it is a notification.
+A response may only be sent in reply to a request.
+</p><p>
+Closing the connection between peers must raise an exception for all unanswered requests on each peer.
+Non-valid requests or responses must result in closing the connection.
+</p><h2>2.2 JSON-RPC over HTTP</h2><p>
+With some limitation, HTTP requests can be used as a transport for communicating between peers.
+</p><p>
+A communication between peers, one being an HTTP client the other an HTTP server, may span multiple HTTP requests. A client side peer may send one or more requests, notifications or responses to its peer by sending an HTTP POST request containing all serialized objects.
+</p><p>
+The server side peer must reply with responses to all requests sent and may send requests or notifications of its own.
+The client side peer must reply to requests received by sending another HTTP POST.
+</p><p>
+To give the serverside peer a chance to send messages to the client side peer, the client side peer may reopen communication by sending an empty HTTP POST.
+</p><p>
+A non-valid request must result in closing the connection.
+A non-valid response must raise an exception for all unanswered requests on the client.
+Closing a connection must raise an exception for all unanswered requests on the client.
+</p><h2>3. JSON Class hinting</h2><p>
+There are only simple data types defined in JSON.
+To overcome this problem in a JSON compatible way a special property for objects is introduced.<br><tt>{"__jsonclass__":["constructor", [param1,...]], "prop1": ...</tt>}<br>
+The object is then instantiated using the constructor, passing in the parameters.
+Once constructed the properties (prop1, ...) will be applied.
+</p><h2>4. Communication Examples</h2><p>
+--&gt; data sent to service<br>
+&lt;-- data coming from service
+</p><ul><li><tt>service.echo("Hello JSON-RPC")</tt></li></ul><div><span>--</span><span>&gt;</span>&nbsp;<span>{</span>&nbsp;<span>"method"</span><span>:</span>&nbsp;<span>"echo"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"Hello&nbsp;JSON-RPC"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;1<span>}</span><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span>&nbsp;<span>"result"</span><span>:</span>&nbsp;<span>"Hello&nbsp;JSON-RPC"</span><span>,</span>&nbsp;<span>"error"</span><span>:</span>&nbsp;<span>null</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;1<span>}</span><br></div><ul><li>multiple request responses
+</li></ul><p>
+This example shows parts of a communication from an example chat application.
+The chat service sends notifications for each chat message the client peer should receive.
+The client peer sends requests to post messages to the chat and expects a positive reply to know the message has been posted.
+</p><div><span>.</span><span>.</span><span>.</span><br><br><span>--</span><span>&gt;</span>&nbsp;<span>{</span><span>"method"</span><span>:</span>&nbsp;<span>"postMessage"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"Hello&nbsp;all!"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;99<span>}</span><br><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span><span>"result"</span><span>:</span>&nbsp;1<span>,</span>&nbsp;<span>"error"</span><span>:</span>&nbsp;<span>null</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;99<span>}</span><br><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span><span>"method"</span><span>:</span>&nbsp;<span>"handleMessage"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"user1"</span><span>,</span>&nbsp;<span>"we&nbsp;were&nbsp;just&nbsp;talking"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;<span>null</span><span>}</span><br><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span><span>"method"</span><span>:</span>&nbsp;<span>"handleMessage"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"user3"</span><span>,</span>&nbsp;<span>"sorry,&nbsp;gotta&nbsp;go&nbsp;now,&nbsp;ttyl"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;<span>null</span><span>}</span><br><br><span>--</span><span>&gt;</span>&nbsp;<span>{</span><span>"method"</span><span>:</span>&nbsp;<span>"postMessage"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"I&nbsp;have&nbsp;a&nbsp;question:"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;101<span>}</span><br><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span><span>"method"</span><span>:</span>&nbsp;<span>"userLeft"</span><span>,</span>&nbsp;<span>"params"</span><span>:</span>&nbsp;<span>[</span><span>"user3"</span><span>]</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;<span>null</span><span>}</span><br><br><span>&lt;</span><span>--</span>&nbsp;<span>{</span><span>"result"</span><span>:</span>&nbsp;1<span>,</span>&nbsp;<span>"error"</span><span>:</span>&nbsp;<span>null</span><span>,</span>&nbsp;<span>"id"</span><span>:</span>&nbsp;101<span>}</span><br><br><span>.</span><span>.</span><span>.</span><br></div><hr><p>
+Copyright (C) 2005 JSON-RPC.ORG
+</p><p>
+This document and translations of it may be used to implement JSON-RPC,
+it may be copied and furnished to others, and derivative works that
+comment on or otherwise explain it or assist in its implementation may
+be prepared, copied, published and distributed, in whole or in part,
+without restriction of any kind, provided that the above copyright
+notice and this paragraph are included on all such copies and derivative
+works. However, this document itself may not be modified in any way.
+</p><p>
+The limited permissions granted above are perpetual and will not be
+revoked by JSON-RPC.org.
+</p><p>
+This document and the information contained herein is provided on an "AS
+IS" basis and json-rpc.org DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+HEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
+MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+</p></div></div><wbr>

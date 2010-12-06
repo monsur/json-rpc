@@ -1,0 +1,819 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.4.1: http://docutils.sourceforge.net/" />
+<title>JSON-RPC 2.0 proposal</title>
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date: 2005-12-18 01:56:14 +0100 (Sun, 18 Dec 2005) $
+:Revision: $Revision: 4224 $
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
+</head>
+<body>
+<div class="document" id="json-rpc-2-0-proposal">
+<h1 class="title">JSON-RPC 2.0 proposal</h1>
+<!-- -*- coding: utf-8 -*- -->
+<p>This is similar to my <a class="reference" href="jsonrpc12_proposal.html">JSON-RPC 1.2 proposal</a>, but:</p>
+<ul class="simple">
+<li>uses a cleaned-up syntax</li>
+<li>does not directly work with JSON-RPC 1.0 clients/servers, but it's easy
+to create a combined v1.0/2.0-server which switches automatically between
+the versions.</li>
+</ul>
+<hr class="docutils" />
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Date:</th><td class="field-body"><p class="first">2007-12-15</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Web site:</th><td class="field-body"><p class="first">(TODO)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Author:</th><td class="field-body"><p class="first">Roland Koebler (r <em>dot</em> koebler <em>at</em> yahoo <em>dot</em> de)</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">TODO:</th><td class="field-body"><ul class="first last simple">
+<li>decide if v1.2 or v2.0 should be used</li>
+<li>adapt copyright-notice</li>
+<li>create (separate) specifications for Service Descriptions and Extensions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<!-- Changelog
+- 2007-12-09:
+    | Error Object: changed ``error`` to ``data``,
+    | Differences from 1.0: extended
+- 2007-12-15:
+    | added "version"-field again to remove compatibility problems,
+    | ``id`` in Requests should not be Null,
+    | cleanup -->
+<div class="contents topic">
+<p class="topic-title first"><a id="table-of-contents" name="table-of-contents"><strong>Table of Contents</strong></a></p>
+<ul class="auto-toc simple">
+<li><a class="reference" href="#preface" id="id11" name="id11">1&nbsp;&nbsp;&nbsp;Preface</a><ul class="auto-toc">
+<li><a class="reference" href="#thoughts-about-rpc" id="id12" name="id12">1.1&nbsp;&nbsp;&nbsp;Thoughts about RPC</a></li>
+<li><a class="reference" href="#differences" id="id13" name="id13">1.2&nbsp;&nbsp;&nbsp;Differences</a><ul class="auto-toc">
+<li><a class="reference" href="#differences-from-version-1-0" id="id14" name="id14">1.2.1&nbsp;&nbsp;&nbsp;Differences from Version 1.0</a></li>
+<li><a class="reference" href="#differences-from-1-1wd" id="id15" name="id15">1.2.2&nbsp;&nbsp;&nbsp;Differences from 1.1WD</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference" href="#specification" id="id16" name="id16">2&nbsp;&nbsp;&nbsp;Specification</a><ul class="auto-toc">
+<li><a class="reference" href="#overview" id="id17" name="id17">2.1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li><a class="reference" href="#conventions" id="id18" name="id18">2.2&nbsp;&nbsp;&nbsp;Conventions</a></li>
+<li><a class="reference" href="#request-procedure-call" id="id19" name="id19">2.3&nbsp;&nbsp;&nbsp;Request (Procedure Call)</a><ul class="auto-toc">
+<li><a class="reference" href="#notification-procedure-call-without-response" id="id20" name="id20">2.3.1&nbsp;&nbsp;&nbsp;Notification (Procedure Call without Response)</a></li>
+<li><a class="reference" href="#parameters-positional-and-named" id="id21" name="id21">2.3.2&nbsp;&nbsp;&nbsp;Parameters (positional and named)</a></li>
+<li><a class="reference" href="#optional-parameters" id="id22" name="id22">2.3.3&nbsp;&nbsp;&nbsp;Optional parameters</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#response-procedure-return" id="id23" name="id23">2.4&nbsp;&nbsp;&nbsp;Response (Procedure Return)</a><ul class="auto-toc">
+<li><a class="reference" href="#error-object" id="id24" name="id24">2.4.1&nbsp;&nbsp;&nbsp;Error Object</a></li>
+</ul>
+</li>
+<li><a class="reference" href="#examples" id="id25" name="id25">2.5&nbsp;&nbsp;&nbsp;Examples</a></li>
+<li><a class="reference" href="#system-description" id="id26" name="id26">2.6&nbsp;&nbsp;&nbsp;System Description</a></li>
+<li><a class="reference" href="#extensions" id="id27" name="id27">2.7&nbsp;&nbsp;&nbsp;Extensions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section">
+<h1><a id="preface" name="preface">1&nbsp;&nbsp;&nbsp;Preface</a></h1>
+<blockquote>
+&quot;<em>JSON-RPC is a lightweight remote procedure call protocol.
+It's designed to be simple!</em>&quot;
+[<a class="reference" href="http://json-rpc.org/wiki/specification">JSON-RPC 1.0</a>]</blockquote>
+<p>That's good.</p>
+<p>But unfortunately, some useful things are missing in <a class="reference" href="http://json-rpc.org/wiki/specification">JSON-RPC 1.0</a>,
+especially named parameters and some definitions about error-messages.
+The <a class="reference" href="http://json-rpc.org/wd/JSON-RPC-1-1-WD-20060807.html">JSON-RPC 1.1 Working Draft</a> on the other side somehow overshoots the
+mark and makes things <em>much</em> more complicated.
+This already led to several discussions on the <a class="reference" href="http://groups.google.com/group/json-rpc">JSON-RPC mailinglist</a> <a class="footnote-reference" href="#id2" id="id1" name="id1">[1]</a>.</p>
+<p>The goal of this document is to propose a JSON-RPC-specification which
+enhances JSON-RPC 1.0, adds reasonable features from the 1.1WD, but still
+stays simple.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1" name="id2">[1]</a></td><td>The mailinglist recently moved from Yahoo to Google.
+It's current location is the <a class="reference" href="http://groups.google.com/group/json-rpc">JSON-RPC Google Group</a>, but for older
+messages, you have to look into the old <a class="reference" href="http://groups.yahoo.com/group/json-rpc/">JSON-RPC Yahoo! Group</a>.</td></tr>
+</tbody>
+</table>
+<div class="section">
+<h2><a id="thoughts-about-rpc" name="thoughts-about-rpc">1.1&nbsp;&nbsp;&nbsp;Thoughts about RPC</a></h2>
+<p>In my opinion, RPC consists of several <em>independent</em> parts:</p>
+<ol class="arabic simple">
+<li>data structure (how requests/responses/errors look like)</li>
+<li>serializer (i.e. JSON, XML, URI, ...)</li>
+<li>transport (i.e. Unix Domain Socket, TCP/IP, HTTP)</li>
+<li>proxy/dispatcher</li>
+</ol>
+<p>Unfortunately, these parts are often not treated as independent, which
+results in unnecessarily complex results <a class="footnote-reference" href="#id5" id="id3" name="id3">[2]</a>. A RPC-specification should
+only define point 1 (&quot;data structure&quot;), and tell the user which
+serialization to use <a class="footnote-reference" href="#id6" id="id4" name="id4">[3]</a>.</p>
+<table class="docutils footnote" frame="void" id="id5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3" name="id5">[2]</a></td><td>(Have you ever tried to run i.e. XML-RPC over Unix Domain Sockets?
+This does not work, because XML-RPC always uses http, although this
+would not be necessary.)</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4" name="id6">[3]</a></td><td>Although requiring a specific serialization would not be absolutely
+necessary: It would also be possible to serialize XML-RPC-data-structures
+in JSON, or JSON-RPC-data-structures in XML. But I don't think that
+things like this are really useful.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2><a id="differences" name="differences">1.2&nbsp;&nbsp;&nbsp;Differences</a></h2>
+<div class="section">
+<h3><a id="differences-from-version-1-0" name="differences-from-version-1-0">1.2.1&nbsp;&nbsp;&nbsp;Differences from Version 1.0</a></h3>
+<p>The differences are:</p>
+<ul>
+<li><div class="first line-block">
+<div class="line"><strong>client-server instead of peer-to-peer</strong>:</div>
+<div class="line">This specification uses a client-server-architecture.</div>
+<div class="line">V1.0 used a peer-to-peer-architecture where every peer was both server and
+client.</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line"><strong>Transport independence</strong>:</div>
+<div class="line">This specification doesn't define any transport-specific issues.</div>
+<div class="line">V1.0 defined that exceptions must be raised if the connection is
+closed, and that invalid requests/responses must close the
+connection or raise exceptions.</div>
+</div>
+</li>
+<li><p class="first"><strong>Named parameters added</strong> (OPTIONAL)</p>
+</li>
+<li><p class="first"><strong>Reduced fields</strong>:</p>
+<ul class="simple">
+<li>Request: <tt class="docutils literal"><span class="pre">params</span></tt> may be omitted</li>
+<li>Notification: don't contain an <tt class="docutils literal"><span class="pre">id</span></tt> anymore</li>
+<li>Response: contain only <tt class="docutils literal"><span class="pre">result</span></tt> OR <tt class="docutils literal"><span class="pre">error</span></tt> (but not both)</li>
+</ul>
+</li>
+<li><p class="first"><strong>&quot;version&quot; field added</strong>: added a <tt class="docutils literal"><span class="pre">version</span></tt>-field to the Request
+to resolve compatibility issues with JSON-RPC 1.0.</p>
+</li>
+<li><p class="first"><strong>Error-definitions added</strong></p>
+</li>
+<li><p class="first"><strong>System descriptions added</strong></p>
+</li>
+<li><p class="first"><strong>Extensions</strong>: moved &quot;Class hinting&quot; from the base specification to
+an extension.</p>
+</li>
+</ul>
+</div>
+<div class="section">
+<h3><a id="differences-from-1-1wd" name="differences-from-1-1wd">1.2.2&nbsp;&nbsp;&nbsp;Differences from 1.1WD</a></h3>
+<p>The <strong>most important</strong> differences are:</p>
+<ul>
+<li><p class="first"><strong>Transport independence</strong>:
+This specification is transport-independent, so you can use any
+transport you like. This removes <em>much</em> of the complexity of the 1.1WD.
+(1.1WD required HTTP.)</p>
+</li>
+<li><p class="first"><strong>Request</strong>:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">params</span></tt>: can be omitted if empty</li>
+<li><tt class="docutils literal"><span class="pre">id</span></tt>: required for Requests (like in 1.0)</li>
+</ul>
+</li>
+<li><p class="first"><strong>Notifications:</strong>
+Notifications still exist (like in 1.0). Every Request without an <tt class="docutils literal"><span class="pre">id</span></tt> is a
+notification. (1.1WD removed Notifications.)</p>
+</li>
+<li><p class="first"><strong>Parameter cleanup</strong>:</p>
+<ul>
+<li><div class="first line-block">
+<div class="line">The <tt class="docutils literal"><span class="pre">params</span></tt>-syntax is <em>much</em> cleaner.</div>
+<div class="line">(1.1WD specified a complex syntax with some ambiguities.)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">Either named or positional parameters are allowed, but not both in one
+call. (If needed, mixed named-and-positional parameters could be
+added later by an extension.)</div>
+<div class="line">(1.1WD allowed mixed parameters in a somehow strange way.)</div>
+</div>
+</li>
+<li><div class="first line-block">
+<div class="line">&quot;Null&quot; is no special value, and a parameter-value of &quot;Null&quot; simply means
+that the parameter should be &quot;Null&quot;.</div>
+<div class="line">(1.1WD used &quot;Null&quot; as a special value.)</div>
+</div>
+</li>
+</ul>
+</li>
+<li><p class="first"><strong>Response</strong>:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">version</span></tt>: removed for Responses</li>
+<li><tt class="docutils literal"><span class="pre">id</span></tt>: required</li>
+</ul>
+</li>
+<li><p class="first"><strong>Error Object cleanup</strong>:
+The <tt class="docutils literal"><span class="pre">name</span></tt> member was removed, because it does not provide any
+information. The error-codes were defined.</p>
+</li>
+<li><p class="first"><strong>Service Description</strong>:
+Use different service descriptions than 1.1WD, and describe them in a
+separate specification.</p>
+</li>
+<li><p class="first"><strong>Member Sequence removed</strong>:
+No special member sequence is necessary.
+(1.1WD suggested the members of the JSON-RPC-object to be in a specific
+order, and allowed the server to refuse requests which do not stick to
+this order.)</p>
+</li>
+<li><p class="first"><strong>No magic</strong>:
+Procedure Call Parity and Call Approximation were removed in this
+specification. A Service must be called <em>exactly</em> as specified.
+The server must not &quot;guess&quot;.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section">
+<h1><a id="specification" name="specification">2&nbsp;&nbsp;&nbsp;Specification</a></h1>
+<div class="section">
+<h2><a id="overview" name="overview">2.1&nbsp;&nbsp;&nbsp;Overview</a></h2>
+<p>JSON-RPC is a stateless, light-weight remote procedure call (RPC) protocol.
+It uses <a class="reference" href="http://www.json.org">JSON</a> (<a class="reference" href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>) as data format, and is transport-independent.
+It's designed to be simple!</p>
+</div>
+<div class="section">
+<h2><a id="conventions" name="conventions">2.2&nbsp;&nbsp;&nbsp;Conventions</a></h2>
+<p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL
+NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;,  &quot;MAY&quot;, and
+&quot;OPTIONAL&quot; in this document are to be interpreted as described in
+<a class="reference" href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p>
+<p>Since JSON-RPC uses JSON, it shares the same type system as JSON
+(see <a class="reference" href="http://www.json.org">http://www.json.org</a> or <a class="reference" href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>). Whenever this document
+refers to any JSON type, the first letter is always capitalized:
+Object, Array, String, Number, True, False, Null.</p>
+<p>All names (i.e. method-names or parameter-names) are case-sensitive.</p>
+<p>Clients are the origin of Request objects.
+Servers are the origin of Response objects.</p>
+</div>
+<div class="section">
+<h2><a id="request-procedure-call" name="request-procedure-call">2.3&nbsp;&nbsp;&nbsp;Request (Procedure Call)</a></h2>
+<p>A remote procedure call is made by sending a Request to a remote service.
+The Request is expressed as a single JSON Object, with the following
+members:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">version</span></tt></dt>
+<dd><p class="first">A String specifying the version of the JSON-RPC protocol.
+MUST be exactly <tt class="docutils literal"><span class="pre">&quot;2.0&quot;</span></tt>.</p>
+<p class="last">If <tt class="docutils literal"><span class="pre">version</span></tt> is missing, the server MAY handle the Request as
+JSON-RPC V1.0-Request.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">method</span></tt></dt>
+<dd><p class="first">A String containing the name of the procedure to be invoked.</p>
+<p class="last">Procedure names that begin with the word <tt class="docutils literal"><span class="pre">system</span></tt> followed by a period
+character (U+002E or ASCII 46) are reserved for system description /
+introspection.</p>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">params</span></tt></dt>
+<dd>An Array or Object (OPTIONAL), that holds the actual parameter values
+for the invocation of the procedure. Can be omitted if empty.</dd>
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd><p class="first">A Request identifier that SHOULD be a JSON scalar (String, Number, True,
+False), but not Null <a class="footnote-reference" href="#id8" id="id7" name="id7">[4]</a>.</p>
+<p>If omitted, the Request is a Notification.</p>
+<p class="last">This <tt class="docutils literal"><span class="pre">id</span></tt> can be used to correlate a Response with its Request.
+The server MUST repeat it verbatim on the Response.</p>
+</dd>
+</dl>
+<p>Every Request, except Notifications, MUST be replied to with a Response.</p>
+<table class="docutils footnote" frame="void" id="id8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7" name="id8">[4]</a></td><td>The use of Null for <tt class="docutils literal"><span class="pre">id</span></tt> in Requests is discouraged, because this
+specification uses an <tt class="docutils literal"><span class="pre">id</span></tt> of Null for Responses with an unknown <tt class="docutils literal"><span class="pre">id</span></tt>,
+and because JSON-RPC 1.0 uses an <tt class="docutils literal"><span class="pre">id</span></tt> of Null for Notifications.</td></tr>
+</tbody>
+</table>
+<div class="section">
+<h3><a id="notification-procedure-call-without-response" name="notification-procedure-call-without-response">2.3.1&nbsp;&nbsp;&nbsp;Notification (Procedure Call without Response)</a></h3>
+<p>A Notification is a special Request, without <tt class="docutils literal"><span class="pre">id</span></tt> and without Response.
+The server MUST NOT reply to a Notification, except for &quot;Parse error&quot; and
+&quot;Invalid Request&quot;.</p>
+<p>Note that Notifications are unreliable, since they do not have a Response, and
+so you cannot detect errors (like e.g. &quot;Invalid params.&quot;, &quot;Internal error.&quot;,
+timeouts or maybe even lost packets on the wire).</p>
+</div>
+<div class="section">
+<h3><a id="parameters-positional-and-named" name="parameters-positional-and-named">2.3.2&nbsp;&nbsp;&nbsp;Parameters (positional and named)</a></h3>
+<p>Parameters for a procedure call can be specified by-position, or
+by-name (OPTIONAL).</p>
+<ul>
+<li><p class="first">by-position: <tt class="docutils literal"><span class="pre">params</span></tt> MUST be an Array, containing the parameters in the
+right order (like in JSON-RPC 1.0).</p>
+<p>This MUST be supported.</p>
+</li>
+<li><p class="first">by-name: <tt class="docutils literal"><span class="pre">params</span></tt> MUST be an Object, containing the parameter-names
+and its values. The names MUST match exactly (including case) the names
+defined by the formal arguments. The order of the name/value-pairs is
+insignificant.</p>
+<p>This MAY be supported.</p>
+</li>
+</ul>
+<p>The position and name of a parameter is defined by the
+formal argument list of the procedure.</p>
+<p>Mixing positional and named parameters in one call is not possible.
+(But could be added by an extension.)</p>
+</div>
+<div class="section">
+<h3><a id="optional-parameters" name="optional-parameters">2.3.3&nbsp;&nbsp;&nbsp;Optional parameters</a></h3>
+<p>If the formal argument list of a procedure defines a default-value for a
+parameter, and the Request does not specify this parameter, the server
+SHOULD use this default-value for this parameter.</p>
+</div>
+</div>
+<div class="section">
+<h2><a id="response-procedure-return" name="response-procedure-return">2.4&nbsp;&nbsp;&nbsp;Response (Procedure Return)</a></h2>
+<p>When a remote procedure call is made, the service MUST reply with a Response
+(except for Notifications).
+The Response is expressed as a single JSON Object, with the following
+members:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">result</span></tt></dt>
+<dd><div class="first last line-block">
+<div class="line">Required on success, omitted on failure.</div>
+<div class="line">The Value that was returned by the procedure. Its contents is entirely
+defined by the procedure.</div>
+<div class="line">This member MUST be entirely omitted if there was an error invoking
+the procedure.</div>
+</div>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">error</span></tt></dt>
+<dd><div class="first last line-block">
+<div class="line">Required on error, omitted on success.</div>
+<div class="line">An Object containing error information about the fault that occurred
+before, during or after the call.</div>
+<div class="line">This member MUST be entirely omitted if there was no such fault.</div>
+</div>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">id</span></tt></dt>
+<dd>The same <tt class="docutils literal"><span class="pre">id</span></tt> as in the Request it is responding to.
+If there was an error before detecting the <tt class="docutils literal"><span class="pre">id</span></tt> in the Request, it MUST
+be Null.</dd>
+</dl>
+<p>Exactly one of <tt class="docutils literal"><span class="pre">result</span></tt> or <tt class="docutils literal"><span class="pre">error</span></tt> MUST be specified. It's not allowed to
+specify both or none.</p>
+<p>For better compatibility with JSON-RPC 1.0-servers, a client MAY however accept
+both <tt class="docutils literal"><span class="pre">result</span></tt> and <tt class="docutils literal"><span class="pre">error</span></tt> if at least one of these is Null (like in the
+JSON-RPC 1.0-specification).</p>
+<p>Note that there is no <tt class="docutils literal"><span class="pre">version</span></tt>-field. Since the Request already defines the
+version, there is no need of repeating this version in the Response.</p>
+<p>If the server does not completely understand a Request (e.g. because
+of additional members), it MAY reject the Request (with &quot;Invalid Request.&quot;).</p>
+<div class="section">
+<h3><a id="error-object" name="error-object">2.4.1&nbsp;&nbsp;&nbsp;Error Object</a></h3>
+<p>When a remote procedure call fails, the Procedure Return object MUST contain
+the <tt class="docutils literal"><span class="pre">error</span></tt> member whose value is a JSON Object with the following members:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">code</span></tt></dt>
+<dd>A Number that indicates the actual error that occurred.
+This MUST be an integer.</dd>
+<dt><tt class="docutils literal"><span class="pre">message</span></tt></dt>
+<dd>A String providing a short description of the error.
+The message SHOULD be limited to a concise single sentence.</dd>
+<dt><tt class="docutils literal"><span class="pre">data</span></tt></dt>
+<dd>Additional information, may be omitted. Its contents is entirely defined by
+the application (e.g. detailed error information, nested errors etc.).</dd>
+</dl>
+<p>The error-codes -32768 .. -32000 (inclusive) are reserved for pre-defined
+errors. Any error-code within this range not defined explicitly below is
+reserved for future use. <a class="footnote-reference" href="#id10" id="id9" name="id9">[5]</a></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="27%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">code</th>
+<th class="head">message</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>-32700</td>
+<td>Parse error.</td>
+<td>Invalid JSON. An error occurred on the
+server while parsing the JSON text.</td>
+</tr>
+<tr><td>-32600</td>
+<td>Invalid Request.</td>
+<td>The received JSON not a valid JSON-RPC
+Request.</td>
+</tr>
+<tr><td>-32601</td>
+<td>Method not found.</td>
+<td>The requested remote-procedure does not exist /
+is not available.</td>
+</tr>
+<tr><td>-32602</td>
+<td>Invalid params.</td>
+<td>Invalid method parameters.</td>
+</tr>
+<tr><td>-32603</td>
+<td>Internal error.</td>
+<td>Internal JSON-RPC error.</td>
+</tr>
+<tr><td>-32099..-32000</td>
+<td>Server error.</td>
+<td>Reserved for implementation-defined
+server-errors.</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9" name="id10">[5]</a></td><td>The error-codes are the same as specified for XML-RPC at
+<a class="reference" href="http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php">http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</a></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section">
+<h2><a id="examples" name="examples">2.5&nbsp;&nbsp;&nbsp;Examples</a></h2>
+<p>Syntax:</p>
+<pre class="literal-block">
+--&gt; data sent to service
+&lt;-- data coming from service
+</pre>
+<p>Procedure Call with positional parameters:</p>
+<pre class="literal-block">
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;subtract&quot;, &quot;params&quot;: [42, 23], &quot;id&quot;: 1}
+&lt;-- {&quot;result&quot;: 19, &quot;id&quot;: 1}
+
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;subtract&quot;, &quot;params&quot;: [23, 42], &quot;id&quot;: 2}
+&lt;-- {&quot;result&quot;: -19, &quot;id&quot;: 2}
+</pre>
+<p>Procedure Call with named parameters:</p>
+<pre class="literal-block">
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;subtract&quot;, &quot;params&quot;: {&quot;subtrahend&quot;: 23, &quot;minuend&quot;: 42}, &quot;id&quot;: 3}
+&lt;-- {&quot;result&quot;: 19, &quot;id&quot;: 3}
+
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;subtract&quot;, &quot;params&quot;: {&quot;minuend&quot;: 42, &quot;subtrahend&quot;: 23}, &quot;id&quot;: 4}
+&lt;-- {&quot;result&quot;: 19, &quot;id&quot;: 4}
+</pre>
+<p>Notification:</p>
+<pre class="literal-block">
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;update&quot;, &quot;params&quot;: [1,2,3,4,5]}
+
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;foobar&quot;}
+</pre>
+<p>Procedure Call of non-existent procedure:</p>
+<pre class="literal-block">
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;foobar&quot;, &quot;id&quot;: 10}
+&lt;-- {&quot;error&quot;: {&quot;code&quot;: -32601, &quot;message&quot;: &quot;Procedure not found.&quot;}, &quot;id&quot;: 10}
+</pre>
+<p>Procedure Call with invalid JSON:</p>
+<pre class="literal-block">
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;foobar, &quot;params&quot;: &quot;bar&quot;, &quot;baz&quot;]
+&lt;-- {&quot;error&quot;: {&quot;code&quot;: -32700, &quot;message&quot;: &quot;Parse error&quot;}, &quot;id&quot;: null}
+</pre>
+<p>Procedure Call with invalid JSON-RPC:</p>
+<pre class="literal-block">
+--&gt; [1,2,3]
+&lt;-- {&quot;error&quot;: {&quot;code&quot;: -32600, &quot;message&quot;: &quot;Invalid JSON-RPC.&quot;}, &quot;id&quot;: null}
+
+--&gt; {&quot;version&quot;: &quot;2.0&quot;, &quot;method&quot;: 1, &quot;params&quot;: &quot;bar&quot;}
+&lt;-- {&quot;error&quot;: {&quot;code&quot;: -32600, &quot;message&quot;: &quot;Invalid JSON-RPC.&quot;}, &quot;id&quot;: null}
+</pre>
+</div>
+<div class="section">
+<h2><a id="system-description" name="system-description">2.6&nbsp;&nbsp;&nbsp;System Description</a></h2>
+<p>Procedure names that begin with <tt class="docutils literal"><span class="pre">system.</span></tt> are reserved (see
+<a class="reference" href="#request-procedure-call">Request (Procedure Call)</a>) for system description / introspection, and
+SHOULD not be used for anything else.</p>
+<p>The Service Descriptions are defined in a related specification.</p>
+<p>All Service Descriptions are OPTIONAL.</p>
+</div>
+<div class="section">
+<h2><a id="extensions" name="extensions">2.7&nbsp;&nbsp;&nbsp;Extensions</a></h2>
+<p>There may be extensions, specified in related specification.
+(e.g. for: class-hinting, circular references, DateTime etc.)</p>
+<p>All extensions are OPTIONAL.</p>
+<hr class="docutils" />
+<p>Copyright (C) 2007 by ...</p>
+<p>This document and translations of it may be used to implement JSON-RPC, it may
+be copied and furnished to others, and derivative works that comment on or
+otherwise explain it or assist in its implementation may be prepared, copied,
+published and distributed, in whole or in part, without restriction of any kind,
+provided that the above copyright notice and this paragraph are included on all
+such copies and derivative works. However, this document itself may not be
+modified in any way.</p>
+<p>The limited permissions granted above are perpetual and will not be revoked.</p>
+<p>This document and the information contained herein is provided &quot;AS IS&quot;
+and ALL WARRANTIES, EXPRESS OR IMPLIED are DISCLAIMED, INCLUDING BUT NOT
+LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN WILL NOT
+INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS
+FOR A PARTICULAR PURPOSE.</p>
+</div>
+</div>
+</div>
+</body>
+</html>

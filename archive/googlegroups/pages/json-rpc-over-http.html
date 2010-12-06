@@ -1,0 +1,217 @@
+<h1>JSON-RPC over HTTP</h1>
+<p></p>
+<div class="document" id="json-rpc-over-http">
+<h1 class="title">JSON-RPC over HTTP<br></h1>
+<table class="docinfo" frame="void" rules="none"><col class="docinfo-name"><col class="docinfo-content"><tbody valign="top">
+<tr>
+<th class="docinfo-name">&nbsp;&nbsp;&nbsp;&nbsp; Date:</th>
+<td>2008-1-15 (RC1)<br></td>
+</tr>
+<tr class="field">
+<th class="docinfo-name">Web site:</th>
+<td class="field-body"><a class="reference" href="../../json-rpc">http://groups.google.com/group/json-rpc</a></td>
+</tr>
+<tr>
+<th class="docinfo-name">&nbsp; Author:</th>
+<td>JSON-RPC Working Group - json-rpc AT googlegroups DOT com</td>
+</tr>
+</tbody></table>
+<!-- -*- coding: utf-8 -*- -->
+<div class="contents topic">
+<p class="topic-title first">&nbsp;</p>
+<p class="topic-title first"><b><a id="contents" name="contents">Contents</a></b></p>
+<ul class="auto-toc simple">
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#preface" id="id8" name="id8">1&nbsp;&nbsp;&nbsp;Preface</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#change-log" id="id9" name="id9">2&nbsp;&nbsp;&nbsp;Change Log</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#specification" id="id10" name="id10">3&nbsp;&nbsp;&nbsp;Specification</a>
+<ul class="auto-toc">
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#overview" id="id11" name="id11">3.1&nbsp;&nbsp;&nbsp;Overview</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#conventions" id="id12" name="id12">3.2&nbsp;&nbsp;&nbsp;Conventions</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#http-header" id="id13" name="id13">3.3&nbsp;&nbsp;&nbsp;HTTP Header</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#post" id="id14" name="id14">3.4&nbsp;&nbsp;&nbsp;POST</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#get" id="id15" name="id15">3.5&nbsp;&nbsp;&nbsp;GET</a>
+<ul class="auto-toc">
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#encoded-parameters" id="id16" name="id16">3.5.1&nbsp;&nbsp;&nbsp;Encoded Parameters</a></li>
+</ul>
+</li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#response-codes" id="id17" name="id17">3.6&nbsp;&nbsp;&nbsp;Response Codes</a>
+<ul class="auto-toc">
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#success" id="id18" name="id18">3.6.1&nbsp;&nbsp;&nbsp;Success</a></li>
+<li><a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#errors" id="id19" name="id19">3.6.2&nbsp;&nbsp;&nbsp;Errors</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils">
+<div class="section">
+<h1>1&nbsp;&nbsp;&nbsp;Preface</h1>
+<blockquote>
+"JSON-RPC is a lightweight remote procedure call protocol. It's designed to be simple!" [JSON-RPC 1.0]</blockquote>
+<p>The goal of this document is to propose a <a class="reference" href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal">JSON-RPC 1.2</a> extension to specify</p>
+<p>For mailing list location: <a class="reference" href="http://groups.google.com/group/json-rpc?hl=en">JSON-RPC Google Group</a></p>
+</div>
+<div class="section">
+<h1><a href="http://#change_log">2   Change Log</a></h1>
+<ul class="simple">
+<li>1/15/2008 - Initial creation</li>
+</ul>
+</div>
+<div class="section">
+<h1><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id10" id="specification" name="specification">3&nbsp;&nbsp;&nbsp;Specification</a></h1>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id11" id="overview" name="overview">3.1&nbsp;&nbsp;&nbsp;Overview</a></h2>
+<p>JSON-RPC over <a class="reference" href="http://www.ietf.org/rfc/rfc2616.txt">HTTP</a> is an extension to the <a class="reference" href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal">JSON-RPC 1.2</a> specification.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id12" id="conventions" name="conventions">3.2&nbsp;&nbsp;&nbsp;Conventions</a></h2>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+document are to be interpreted as described in <a class="reference" href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>.</p>
+<p>Since JSON-RPC uses JSON, it shares the same type system as JSON (see <a class="reference" href="http://www.json.org/">http://www.json.org</a> or <a class="reference" href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>).
+Whenever this document refers to any JSON type, the first letter is
+always capitalized: Object, Array, String, Number, True, False, Null.</p>
+<p>Clients are the origin of Request objects. Servers are the origin of Response objects.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id13" id="http-header" name="http-header">3.3&nbsp;&nbsp;&nbsp;HTTP Header</a></h2>
+<p>Requirements:</p>
+<p>Regardless of whether a remote procedure call is made using HTTP GET
+or POST, the HTTP request message MUST specify the following headers:</p>
+<ul class="simple">
+<li>Content-Type SHOULD be 'application/json-rpc' but MAY be 'application/json' or 'application/jsonrequest'</li>
+<li>The Content-Length MUST be specified and correct according to the
+guidelines and rules laid out in Section 4.4, Message Length, of the <a class="reference" href="http://www.ietf.org/rfc/rfc2616.txt">HTTP</a> specification.</li>
+<li>The Accept MUST be specified and SHOULD read 'application/json-rpc' but MAY be 'application/json' or 'application/jsonrequest'.</li>
+</ul>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id14" id="post" name="post">3.4&nbsp;&nbsp;&nbsp;POST</a></h2>
+<p>Post body contains the Object request specified in <a class="reference" href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal#request-procedure-call">JSON-RPC 1.2 section 2.4</a>.</p>
+<p>Response to a Post contains the Object response specified in <a class="reference" href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal#response-procedure-return">JSON-RPC 1.2 section 2.5</a>.</p>
+<p>Responses with a null error will result in an HTTP 200 Status Code, while non-null error codes will be mapped to
+HTTP Status code as specified in the <a href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal#error-object">Errors</a> section.</p>
+<pre class="literal-block">--&gt; POST /ENDPOINT HTTP/1.1<br> Host: ...<br> Content-Type: application/json-rpc<br> Content-Length: ...<br><br> {"method": "sum", "params": {"a":3, "b":4}, "id":0}<br><br>&lt;-- HTTP/1.1 200 OK<br> ...<br> Content-Type: application/json-rpc<br><br> {"result": 7, "error": null, "id": 0}<br><br><br>--&gt; POST /ENDPOINT HTTP/1.1<br> Host: ...<br> Content-Type: application/json-rpc<br> Content-Length: ...<br><br> {"method": "test", "params": [], "id": 0}<br></pre>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id15" id="get" name="get">3.5&nbsp;&nbsp;&nbsp;GET</a></h2>
+<ul class="simple">
+<li>MUST be either Array or Object parameters <a class="footnote-reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id5" id="id1" name="id1">[1]</a></li>
+<li>Keep in mind that some old clients and proxies have issues wth URI lengths over 255 bytes <a class="footnote-reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id6" id="id2" name="id2">[2]</a></li>
+<li>HTTP POST is the preferred method for sending JSON-RPC</li>
+<li>Parameters must be <a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#encoded-parameters">encoded</a></li>
+</ul>
+<pre class="literal-block">http://&lt;end point&gt;?method=&lt;method name&gt;&amp;params=&lt;encoded params&gt;&amp;id=1<br></pre>
+<div class="section">
+<h3><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id16" id="encoded-parameters" name="encoded-parameters">3.5.1&nbsp;&nbsp;&nbsp;Encoded Parameters</a></h3>
+<p>Encoding Steps:</p>
+<ol class="arabic simple">
+<li><a class="reference" href="http://tools.ietf.org/html/rfc4648#section-4">Base 64</a> param value</li>
+<li><a class="reference" href="http://www.blooberry.com/indexdot/html/topics/urlencoding.htm">URL Encoded</a> Base 64 param value</li>
+</ol>
+<p>Pre-Encoded Params:</p>
+<pre class="literal-block">http://&lt;end point&gt;?method=sum&amp;params={"a":3,"b":4}&amp;id=2<br>http://&lt;end point&gt;?method=sum&amp;params=[3,4]&amp;id=1<br></pre>
+<p>Encoded Request:</p>
+<pre class="literal-block">http://&lt;end point&gt;?method=sum&amp;params=eyJhIjozLCJiIjo0fQ%3D%3D&amp;id=2<br>http://&lt;end point&gt;?method=sum&amp;params=WzMsNF0%3D&amp;id=1<br></pre>
+</div>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id17" id="response-codes" name="response-codes">3.6&nbsp;&nbsp;&nbsp;Response Codes</a></h2>
+<div class="section">
+<h3><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id18" id="success" name="success">3.6.1&nbsp;&nbsp;&nbsp;Success</a></h3>
+<p>For non-notification requests <a class="footnote-reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id7" id="id4" name="id4">[3]</a> including <tt class="docutils literal"><span class="pre">system</span></tt> procedures using <a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#post">POST</a> or <a class="reference" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#get">GET</a> MUST indicate a success response using <a class="reference" href="http://www.ietf.org/rfc/rfc2616.txt">HTTP</a> status code: 200.</p>
+<p>However, for <a class="reference" href="http://json-rpc.googlegroups.com/web/jsonrpc12_proposal.html#notification-procedure-call-without-response">JSON-RPC 1.2 Notification</a> requests, a success response MUST be an <a class="reference" href="http://www.ietf.org/rfc/rfc2616.txt">HTTP</a> status code: 204.</p>
+</div>
+<div class="section">
+<h3><a class="toc-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id19" id="errors" name="errors">3.6.2&nbsp;&nbsp;&nbsp;Errors</a></h3>
+<table class="docutils" border="1"><colgroup><col width="22%"><col width="31%"><col width="47%"></colgroup><tbody valign="top">
+<tr>
+<td>HTTP Status</td>
+<td>code</td>
+<td>message</td>
+</tr>
+<tr>
+<td>500</td>
+<td>-32700</td>
+<td>Parse error.</td>
+</tr>
+<tr>
+<td>400</td>
+<td>-32600</td>
+<td>Invalid Request.</td>
+</tr>
+<tr>
+<td>404</td>
+<td>-32601</td>
+<td>Method not found.</td>
+</tr>
+<tr>
+<td>500</td>
+<td>-32602</td>
+<td>Invalid params.</td>
+</tr>
+<tr>
+<td>500</td>
+<td>-32603</td>
+<td>Internal error.</td>
+</tr>
+<tr>
+<td>500</td>
+<td>-32099..-32000</td>
+<td>Server error.</td>
+</tr>
+</tbody></table>
+<p>For more details on error codes see table in <a class="reference" href="http://json-rpc.googlegroups.com/web/jsonrpc12_proposal.html#error-object">JSON-RPC 1.2 section 2.5.1</a>.</p>
+<p>For more details on HTTP Status codes, refer to <a class="reference" href="http://www.ietf.org/rfc/rfc2616.txt">HTTP</a> section 6.1.1.</p>
+<hr class="docutils">
+<table class="docutils footnote" id="id5" frame="void" rules="none"><colgroup><col class="label"><col></colgroup><tbody valign="top">
+<tr>
+<td class="label"><a class="fn-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id1" name="id5">[1]</a></td>
+<td>Per <a class="reference" href="json-rpcjson-rpc-1-2-proposal">JSON-RPC 1.2</a> specification</td>
+</tr>
+</tbody></table>
+<table class="docutils footnote" id="id6" frame="void" rules="none"><colgroup><col class="label"><col></colgroup><tbody valign="top">
+<tr>
+<td class="label"><a class="fn-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id2" name="id6">[2]</a></td>
+<td><a class="reference" href="http://classicasp.aspfaq.com/forms/what-is-the-limit-on-querystring/get/url-parameters.html">http://classicasp.aspfaq.com/forms/what-is-the-limit-on-querystring/get/url-parameters.html</a></td>
+</tr>
+</tbody></table>
+<table class="docutils footnote" id="id7" frame="void" rules="none"><colgroup><col class="label"><col></colgroup><tbody valign="top">
+<tr>
+<td class="label"><a class="fn-backref" href="http://json-rpc.googlegroups.com/web/json-rpc-over-http.html?gda=OdkhiEgAAABCjJBySxs8sTZxWk9lcXTuxojC98lE0ShWjUdAt6Xr4GG1qiJ7UbTIup-M2XPURDSN5V4_Q2Ywnt0PdgvzCeQMT73YvJGyKyaOMk-13V3AQA#id4" name="id7">[3]</a></td>
+<td><a class="reference" href="http://groups.google.com/group/json-rpc/web/json-rpc-1-2-proposal#request-procedure-call">JSON-RPC 1.2 section 2.4</a></td>
+</tr>
+</tbody></table>
+<hr class="docutils">
+<p>Copyright (C) 2008 by JSON-RPC Working Group</p>
+<p>&nbsp;</p>
+<p>This document and translations of it may be used to implement
+JSON-RPC over HTTP, it may be copied and furnished to others, and
+derivative works that comment on or otherwise explain it or assist in
+its implementation may be prepared, copied, published and distributed,
+in whole or in part, without restriction of any kind, provided that the
+above copyright notice and this paragraph are included on all such
+copies and derivative works. However, this document itself may not be
+modified in any way.</p>
+<p>The limited permissions granted above are perpetual and will not be revoked.</p>
+<p>This document and the information contained herein is provided "AS
+IS" and ALL WARRANTIES, EXPRESS OR IMPLIED are DISCLAIMED, INCLUDING
+BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION HEREIN
+WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF
+MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.</p>
+</div>
+</div>
+</div>
+</div>
+<p><br>
+</p>
+<p><br>
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+<img alt="Creative Commons License" style="border-width: 0pt;" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png">
+</a>
+<br>This work is licensed under a 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>
+</p>
+<p><br>
+</p>

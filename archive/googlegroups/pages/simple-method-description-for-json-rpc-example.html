@@ -1,0 +1,28 @@
+<h1>Simple Method Description For JSON-RPC Example</h1>
+<p>//SMD for a JSON-RPC service example</p>
+<p>{<br>&nbsp;transport: "RAW_POST",&nbsp;&nbsp;</p>
+<p>&nbsp;envelope: "JSON-RPC",&nbsp;</p>
+<p>&nbsp;serviceUrl: "/service", </p>
+<p>&nbsp;methods: {&nbsp;<br>&nbsp;&nbsp;add: {<br>&nbsp;&nbsp;&nbsp;parameters: [&nbsp; //&nbsp;an array indicates that positional parameters&nbsp;should be used for this method<br>&nbsp;&nbsp;&nbsp;&nbsp;{type: "integer", default: 0},<br>&nbsp;&nbsp;&nbsp;&nbsp;{type: "integer", default: 0},<br>&nbsp;&nbsp;&nbsp;],</p>
+<p>&nbsp;&nbsp; returns:"integer"<br>&nbsp;&nbsp;},</p>
+<p>&nbsp; divide: {</p>
+<p>&nbsp;&nbsp;&nbsp; description:"Do division",</p>
+<p>&nbsp;&nbsp;&nbsp; parameters: { // an object indicates that named parameters should be used for this method</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; divisor:{type:"integer"},</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; dividend:{type:"integer"}</p>
+<p>&nbsp;&nbsp;&nbsp; },</p>
+<p>&nbsp;&nbsp;&nbsp; returns:"float"</p>
+<p>&nbsp; },</p>
+<p>&nbsp;&nbsp;simple: {},// no requirements on parameters or return type</p>
+<p>&nbsp; getAddress : {</p>
+<p>&nbsp;&nbsp;&nbsp; description : "Takes a person and returns an address",</p>
+<p>&nbsp;&nbsp;&nbsp; parameters : {</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; person : {type: // for the type we use a schema</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {firstName:{type:"string"},lastName:{type:"string"}}</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp; },</p>
+<p>&nbsp;&nbsp;&nbsp; },</p>
+<p>&nbsp;&nbsp;&nbsp; returns : // use a schema for the return type</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {street:{type:"string"},zip:{type:"string"},state:{type:"string"},town:{type:"string"}}</p>
+<p>&nbsp; }</p>
+<p>&nbsp;}</p>
+<p>}</p><wbr>

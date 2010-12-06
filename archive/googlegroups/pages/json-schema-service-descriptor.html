@@ -1,0 +1,114 @@
+<h1>Json Schema Service Descriptor</h1>
+<H1>JSON Schema Service Descriptor</H1>
+<P>By including method definitions, <A href="http://www.json.com/json-schema-proposal/">JSON Schema</A> can easily be extended to be a service descriptor for the RPC (remote procedure call) service JSON-RPC. JSON Schema provides robust type definition which can be utilized for defining types in method call contracts. In addition, using JSON Schema allows methods to be defined in the same manner as property definitions, so direct object/REST and RPC services can be defined in a uniform manner, and services can even support both direct object and RPC services. </P>
+<P>A JSON Schema service descriptor is simply a JSON Schema with the additional definition for methods. For this specification, a <EM>schema </EM>will be used to denote a JSON Schema definition. A JSON Schema service descriptor is an JSON object with properties that correspond to available methods or procedures that can be called, and the values of the properties in the schema should contain a method definitions that provide the definition for how the methods should be called. A method definition can define various attributes of the method that define it's usage and valid values. A method definition follows the same format as a JSON Schema <A href="http://www.json.com/json-schema-proposal/#propertyDefinition">property definition</A> except, that the type value must be "method", the property attributes describe the return value, and there are additional attributes "returns" which describes the <A href="http://www.json.com/json-schema-proposal/#typeDefinition">type</A> of the return value, and "params" which is an array of <A href="http://www.json.com/json-schema-proposal/#propertyDefinition">property definitions</A> (or possibly an object if 1.1 supports objects as params). Here are the properties that are in addition to the standard JSON Schema <A href="http://www.json.com/json-schema-proposal/#propertyDefinition">property definition</A>: </P>
+<P>
+<TABLE>
+<TBODY>
+<TR>
+<TD>Property</TD>
+<TD>Meaning</TD></TR>
+<TR>
+<TD>type</TD>
+<TD>Must be "method" for a method definition.</TD></TR>
+<TR>
+<TD>returns</TD>
+<TD>Must be a <A href="http://www.json.com/json-schema-proposal/#typeDefinition">type definition</A>. If it is not included, the return value is not needed, the method should be considered a notification.</TD></TR>
+<TR>
+<TD>params</TD>
+<TD>Must be an array of <A href="http://www.json.com/json-schema-proposal/#propertyDefinition">property definitions</A>. Each property definition should also have a name property to define the name of parameters. A property definition with the name "*" can be used to define the type for additional parameters (in the case of variable parameters). Note: If objects as params is accepted as a valid value for JSON-RPC, this can be an object/schema as well, with property definitions for each property in the object.</TD></TR>
+<TR>
+<TD>required</TD>
+<TD>Specifically indicates whether the method MUST return a value. This is false by default.</TD></TR>
+<TR>
+<TD>nullable</TD>
+<TD>This indicates whether the return value may be a null. This is false by default.</TD></TR>
+<TR>
+<TD>minimum</TD>
+<TD>This indicates the minimum value for the return value when the type of the value is a number, or it indicates the minimum number of values in an array when an array is the return value.</TD></TR>
+<TR>
+<TD>maximum</TD>
+<TD>This indicates the maximum value for the return value when the type of the value is a number, or it indicates the maximum number of values in an array when an array is the return value.</TD></TR>
+<TR>
+<TD>pattern</TD>
+<TD>When the return value is a string, this provides a regular expression that the return string value must match. Regular expressions should follow the regular expression specification from ECMA 262/<A href="http://perldoc.perl.org/perlre.html">Perl 5</A>.</TD></TR>
+<TR>
+<TD>length</TD>
+<TD>When the return value is a string, this indicates maximum length of the string.</TD></TR>
+<TR>
+<TD>options</TD>
+<TD>This provides an enumeration of possible values that are valid for the return value.</TD></TR>
+<TR>
+<TD>unconstrained</TD>
+<TD>When used in conjunction with the options property, this indicates a return value can be used that is not in the list of options. This has no meaning when the options property is not a sibling.</TD></TR>
+<TR>
+<TD>description</TD>
+<TD>This provides a description of the purpose the method. The value should be a string. "description":{"My method"}</TD></TR>
+<TR>
+<TD>format</TD>
+<TD>This indicates what format the data is among some predefined formats which may include: 
+<UL>
+<LI>date - a string following the ISO format 
+<LI>address 
+<LI>schema - a schema definition object 
+<LI>person 
+<LI>page 
+<LI>html - a string representing HTML </LI></UL><EM>Need to provide definitions for these formats, will be covered in another spec.</EM></TD></TR></TBODY></TABLE></P>
+<P>In addition a service descriptor should contain the <EM>id</EM> and <EM>description</EM> properties, and may contain the <EM>version</EM> property as defined here:</P>
+<P>
+<TABLE class=mceVisualAid>
+<TBODY>
+<TR>
+<TD class=mceVisualAid>Property</TD>
+<TD class=mceVisualAid>Meaning</TD></TR>
+<TR>
+<TD class=mceVisualAid>id</TD>
+<TD class=mceVisualAid>A unique identifier for the service. When possible, the id should represent the URL from the which service descriptor can be accessed (relative URLs are acceptable).</TD></TR>
+<TR>
+<TD class=mceVisualAid>description</TD>
+<TD class=mceVisualAid>This a description&nbsp;of the service.&nbsp;</TD></TR>
+<TR>
+<TD class=mceVisualAid>version</TD>
+<TD class=mceVisualAid>This is the version of the service.</TD></TR></TBODY></TABLE></P>
+<P>A <FONT face=arial,sans-serif>service descriptor could look like (each top level property defines an available&nbsp;method/procedure):<BR></FONT></P><PRE>{"divide": {
+  "description":"Divide one number by another",
+  "type":"method",
+  "returns":"number",
+  "params":[{"type":"number","name":"dividend","required":true},
+            {"type":"number","name":"divisor","required":true}]
+  },
+"sqrt": {
+  "description":"Find the square root of a number",
+  "type":"method",
+  "returns":"number",
+  "params":[{"type":"number","name":"square","required":true,
+             "minimum":0,"description":"Number to find the square root of"}]
+  },
+"sqrtComplex": {
+  "description":"Find the square root of a number including negative numbers",
+  "type":"method",
+  "returns":["number", {"realPart":{"type":"number"},
+                       "imaginaryPart":{"type":"number"}}],
+  "params":[{"type":"number","name":"square","required":true,
+             "description":"Number to find the square root of"}]
+  },<BR>"sum": {<BR>&nbsp; "description":"Find the sum of the parameters",<BR>&nbsp; "type":"method",<BR>&nbsp; "returns":"number"<CODE>,<BR>&nbsp; "params":[{"type":"number","name":"*",<BR>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"description":"Number to include in the sum"}]<BR>&nbsp; },<BR>"id":"http://math.com/mathMethods.schema"<BR>,"description":"Some math methods. Strings as property/method definitions are ignored by JSON Schema validators, but this property can be used for a description."</CODE>
+}
+</PRE>Here you can see that we are utilizing various JSON Schema definitions such as union types (allowing for a "number" or a complex number object to be returned), and object definitions (complex number definition) in the type definitions. 
+<H2>Mixing RPCs and Object Data</H2>By utilizing JSON Schema, a schema can provide information about a JSON source without any assumptions about whether it provides RPCs or direct object access (REST when using HTTP) or both. For example if there was a schema for the url http://www.myfriends.com/jim: <PRE>{"firstName":{"type":"string"},
+ "lastName":{"type":"string"},
+ "friends":{"type":{"items":{"firstName":{"type":"string"},
+                             "lastName":{"type":"string"}}},
+ "addFriend:
+  {"type":"method",
+   "description":"Adds a friend to this person"},
+   "params":[{"firstName":{"type":"string"},
+              "lastName":{"type":"string"}]
+  },<BR> "id":"http://friends.com/friend.schema"
+}
+</PRE>In this example, the schema defines methods that can be called (using JSON-RPC) on this object (<A href="http://www.myfriends.com/john">http://www.myfriends.com/john</A>) as well as properties that should be expected from this object/url. That is the object properties might look something like this (on HTTP what would be returned by GET, but no protocol needs to be assumed): <PRE>{"firstName":"John","lastName":"Doe","friends":[]}
+</PRE>Note that this example could be more DRY by using a <A href="http://www.json.com/2007/10/19/json-referencing-proposal-and-library/">JSON Referencing</A> scheme to define a person definition, and reusing that definition for the friends array and the parameter definition, but this is not necessary. 
+<P></P>
+<P></P>
+<P></P>
+<P></P>
+<P></P><WBR>
